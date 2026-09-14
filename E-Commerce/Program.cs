@@ -1,11 +1,13 @@
 
+using E_Commerce.Domain.Contracts;
+using E_Commerce.Extensions;
 using E_Commerce.Infrastructure;
 
 namespace E_Commerce
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
@@ -13,12 +15,18 @@ namespace E_Commerce
 
             builder.Services.AddControllers();
 
+          //  builder.Services.AddScoped<IDataSeeder, CatalogDataSeeder>(); => we will make the infra layer register the service
+
             builder.Services.AddInfrastructureServices(builder.Configuration);
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
             var app = builder.Build();
+            await app.SeedAndMigrateDataAsync();
+           
+            
+
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())

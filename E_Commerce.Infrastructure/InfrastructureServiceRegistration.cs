@@ -1,4 +1,6 @@
-﻿using E_Commerce.Infrastructure.Data;
+﻿using E_Commerce.Domain.Contracts;
+using E_Commerce.Infrastructure.Data;
+using E_Commerce.Infrastructure.DataSeeding;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -19,8 +21,15 @@ namespace E_Commerce.Infrastructure
                 options.UseSqlServer(config.GetConnectionString("DefaultConnection"));
                 //so it will get the connection string from appsettings.json
             });
+
+            //  services.AddScoped<IDataSeeder, CatalogDataSeeder>();
+
+            services.AddKeyedScoped<IDataSeeder, CatalogDataSeeder>("catalog"); 
+
             return services;
         }
+
+     
 
     }
 }
