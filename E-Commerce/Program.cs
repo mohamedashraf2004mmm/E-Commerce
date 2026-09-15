@@ -1,4 +1,5 @@
 
+using E_Commerce.Application;
 using E_Commerce.Domain.Contracts;
 using E_Commerce.Extensions;
 using E_Commerce.Infrastructure;
@@ -18,6 +19,7 @@ namespace E_Commerce
           //  builder.Services.AddScoped<IDataSeeder, CatalogDataSeeder>(); => we will make the infra layer register the service
 
             builder.Services.AddInfrastructureServices(builder.Configuration);
+            builder.Services.AddApplicationServices();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
