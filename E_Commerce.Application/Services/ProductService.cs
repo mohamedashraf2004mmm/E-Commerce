@@ -22,24 +22,34 @@ namespace E_Commerce.Application.Services
             this._unitOfWork = unitOfWork;
             this._mapper = mapper;
         }
-        public Task<Result<IReadOnlyList<BrandDto>>> GetAllBrandsAsync(CancellationToken ct = default)
+        public async Task<Result<IReadOnlyList<BrandDto>>> GetAllBrandsAsync(CancellationToken ct = default)
         {
-            var brands = _unitOfWork.GetRepository<ProductBrand , int>().GetAllAsync(ct);
+            var brands = await _unitOfWork.GetRepository<ProductBrand , int>().GetAllAsync(ct);
+            var data = _mapper.Map<IReadOnlyList<BrandDto>>(brands);
+            return Result<IReadOnlyList<BrandDto>>.Ok(data);
         }
 
-        public Task<Result<IReadOnlyList<ProductDto>>> GetAllProductsAsync(CancellationToken ct = default)
+        public async Task<Result<IReadOnlyList<ProductDto>>> GetAllProductsAsync(CancellationToken ct = default)
         {
-            throw new NotImplementedException();
+            var products = await _unitOfWork.GetRepository<Product, int>().GetAllAsync(ct);
+            var data = _mapper.Map<IReadOnlyList<ProductDto>>(products);
+            return Result<IReadOnlyList<ProductDto>>.Ok(data);
         }
 
-        public Task<Result<IReadOnlyList<TypeDto>>> GetAllTypesAsync(CancellationToken ct = default)
+        public async Task<Result<IReadOnlyList<TypeDto>>> GetAllTypesAsync(CancellationToken ct = default)
         {
-            throw new NotImplementedException();
+            var types = await _unitOfWork.GetRepository<ProductType, int>().GetAllAsync(ct);
+            var data = _mapper.Map<IReadOnlyList<TypeDto>>(types);
+            return Result<IReadOnlyList<TypeDto>>.Ok(data);
         }
 
-        public Task<Result<ProductDto>> GetProductByIdAsync(int id, CancellationToken ct = default)
+        public async Task<Result<ProductDto>> GetProductByIdAsync(int id, CancellationToken ct = default)
         {
-            throw new NotImplementedException();
+            var product = await _unitOfWork.GetRepository<Product,int>().GetByIdAsync(id, ct);
+            if (product == null)
+                return Error.NotFound("Product.notfound" , $"product with id {id} was not found");
+            var data = _mapper.Map<ProductDto>(product);
+            return Result<ProductDto>.Ok(data);
         }
     }
 }

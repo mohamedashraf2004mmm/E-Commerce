@@ -1,4 +1,6 @@
-﻿using E_Commerce.Application.Profiles;
+﻿using E_Commerce.Application.Contracts;
+using E_Commerce.Application.Profiles;
+using E_Commerce.Application.Services;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -15,6 +17,7 @@ namespace E_Commerce.Application
             // services.AddAutoMapper(c => c.AddProfiles(new[] { new ProductProfile() }));
 
             services.AddAutoMapper(c => { }, typeof(ApplicationServicesRegistration).Assembly);
+            services.AddScoped<IProductService, ProductService>();
             return services;
         }
     }
