@@ -26,6 +26,8 @@ namespace E_Commerce.Controllers
 
         //get product by id
         [HttpGet("{id}")]
+        //for swagger
+        [ProducesResponseType(typeof(ProblemDetails),StatusCodes.Status404NotFound)]
         public async Task<ActionResult<ProductDto>>GetProduct(int id , CancellationToken ct)
         {
             var result = await _productService.GetProductByIdAsync(id, ct);
