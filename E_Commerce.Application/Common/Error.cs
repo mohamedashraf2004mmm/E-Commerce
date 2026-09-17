@@ -1,4 +1,6 @@
-﻿namespace E_Commerce.Application.Common
+﻿using System.Text.Json.Serialization;
+
+namespace E_Commerce.Application.Common
 {
     public record Error(string code , string Description , ErrorType ErrorType = ErrorType.Failure)
     {
@@ -23,7 +25,7 @@
         }
 
         public static Error Unauthorized(string code = "General.Unauthorized", string description = "UnAuthorized!!!")
-        {
+        { 
             return new Error(code, description, ErrorType.Unauthorized);
         }
 
@@ -37,7 +39,7 @@
             return new Error(code, description, ErrorType.InvalidCredentials);
         }
     }
-
+    [JsonConverter(typeof(JsonStringEnumConverter))]
     public enum ErrorType
     {
         Failure = 0,
