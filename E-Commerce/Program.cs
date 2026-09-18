@@ -1,8 +1,10 @@
 
 using E_Commerce.Application;
+using E_Commerce.Application.Profiles;
 using E_Commerce.Domain.Contracts;
 using E_Commerce.Extensions;
 using E_Commerce.Infrastructure;
+using Microsoft.Extensions.FileProviders;
 
 namespace E_Commerce
 {
@@ -20,9 +22,14 @@ namespace E_Commerce
 
             builder.Services.AddInfrastructureServices(builder.Configuration);
             builder.Services.AddApplicationServices();
+
+            builder.Services.Configure<UrlSettings>(builder.Configuration.GetSection("UrlSettings"));
+
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+
+
 
             var app = builder.Build();
             await app.SeedAndMigrateDataAsync();
@@ -36,6 +43,13 @@ namespace E_Commerce
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
+
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = new PhysicalFileProvider(Path.Combine(builder.Environment.ContentRootPath, "Files")),
+                RequestPath = "/Files"
+
+            });
 
             app.UseHttpsRedirection();
 

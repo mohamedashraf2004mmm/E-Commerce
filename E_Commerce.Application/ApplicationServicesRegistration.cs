@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static E_Commerce.Application.Profiles.PictureUrlResolver;
 
 namespace E_Commerce.Application
 {
@@ -18,6 +19,7 @@ namespace E_Commerce.Application
 
             services.AddAutoMapper(c => { }, typeof(ApplicationServicesRegistration).Assembly);
             services.AddScoped<IProductService, ProductService>();
+            
             return services;
         }
     }
