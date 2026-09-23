@@ -17,12 +17,17 @@ namespace E_Commerce.Infrastructure.Specifications
             //entryPoint
 
             var query = inputQuery;
+            if(spec.Condition != null)
+            {
+                query = query.Where(spec.Condition);
+            }
+
             if (spec.IncludeExpressions.Any())
             {
                 //foreach (var expression in spec.IncludeExpressions)
                 //{
                 //    query = query.Include(expression);
-                //}
+                //} 
                 query = spec.IncludeExpressions.Aggregate(query, (current, nextexp) => current.Include(nextexp));
             }
             return query;

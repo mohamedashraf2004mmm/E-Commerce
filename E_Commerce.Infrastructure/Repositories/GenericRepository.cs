@@ -31,6 +31,12 @@ namespace E_Commerce.Infrastructure.Repositories
         public async Task<TEntity?> GetByIdAsync(TKey id, CancellationToken ct = default)
             => await _dbContext.Set<TEntity>().FindAsync(id, ct);
 
+        public async Task<TEntity?> GetByIdAsync(ISpecifications<TEntity, TKey> Spec, CancellationToken ct = default)
+        {
+            var query = SpecificationEvaluator.CreateQuery(_dbContext.Set<TEntity>(), Spec);
+            return await query.FirstOrDefaultAsync();
+        }
+
         public void Remove(TEntity entity) => _dbContext.Set<TEntity>().Remove(entity);
 
 
