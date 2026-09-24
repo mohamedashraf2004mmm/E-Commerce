@@ -13,5 +13,15 @@ namespace E_Commerce.Application.Common
         public string? SearchValue { get; set; }
         public ProductSortingOptions Sort { get; set; }
         //public decimal? Price { get; set; }
+        public int pageIndex { get; set; } = 1;
+        private const int DefaultPageSize = 5;
+        private const int MaximumPageSize = 5;
+
+        private int pageSize = DefaultPageSize;
+        public int PageSize 
+        {
+            get => pageSize;
+            set => pageSize = value > MaximumPageSize ? MaximumPageSize : (value < 1 ? DefaultPageSize : value);
+        }
     }
 }

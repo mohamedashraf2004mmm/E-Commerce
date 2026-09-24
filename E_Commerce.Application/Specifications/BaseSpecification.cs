@@ -19,6 +19,12 @@ namespace E_Commerce.Application.Specifications
 
         public Expression<Func<TEntity, object>>? OrderByDescending { get; private set; }
 
+        public int Take { get; private set; }
+
+        public int Skip { get; private set; }
+
+        public bool IsPaginated { get; private set; }
+
         protected BaseSpecification(Expression<Func<TEntity, bool>>condition)
         {
             this.Condition = condition;
@@ -36,6 +42,12 @@ namespace E_Commerce.Application.Specifications
         protected void SetOrderByDescending(Expression<Func<TEntity, object>> orderByDescExpression)
         {
             OrderByDescending = orderByDescExpression;
+        }
+        protected void ApplyPagination(int pageSize , int pageIndex)
+        {
+            IsPaginated = true;
+            Take = pageSize;
+            Skip = (pageIndex - 1) * pageSize;
         }
     }
 }
