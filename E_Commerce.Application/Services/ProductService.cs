@@ -35,8 +35,10 @@ namespace E_Commerce.Application.Services
             var spec = new ProductWithBrandAndTypeSpec(queryParams);
             var products = await _unitOfWork.GetRepository<Product, int>().GetAllAsync(spec,ct);
             var data = _mapper.Map<IReadOnlyList<ProductDto>>(products);
+            var countSpec = new ProductCountSpecifications(queryParams);
+            var countAllProducts = await _unitOfWork.GetRepository<Product, int>().CountAsync(countSpec);
             var result = new PaginatedResult<ProductDto>(queryParams.PageSize,
-                queryParams.pageIndex,data.Count,data);
+                queryParams.pageIndex,countAllProducts,data);
             return Result<PaginatedResult<ProductDto>>.Ok(result);
            
         }
