@@ -5,6 +5,7 @@ using E_Commerce.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using StackExchange.Redis;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,6 +29,11 @@ namespace E_Commerce.Infrastructure
             services.AddKeyedScoped<IDataSeeder, CatalogDataSeeder>("catalog");
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+            services.AddSingleton<IConnectionMultiplexer>(c =>
+            {
+                return ConnectionMultiplexer.Connect(config.GetConnectionString("RedisConnection"));
+            });
 
             return services;
         }
