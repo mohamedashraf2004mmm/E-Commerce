@@ -1,4 +1,4 @@
-﻿using E_Commerce.Domain.Contracts;
+using E_Commerce.Domain.Contracts;
 using E_Commerce.Domain.Entities.Baskets;
 using Microsoft.Extensions.Caching.Distributed;
 using StackExchange.Redis;
@@ -23,7 +23,16 @@ namespace E_Commerce.Infrastructure.Repositories
         public async Task<CustomerBasket?> CreateOrUpdateBasketAsync(CustomerBasket basket, TimeSpan? timeToLive = null, CancellationToken ct = default)
         {
             var value = JsonSerializer.Serialize(basket);
-           var result = await _database.StringSetAsync(basket.Id, value, timeToLive ?? TimeSpan.FromDays(7));
+
+            var expiry = !timeToLive.HasValue || timeToLive.Value <= TimeSpan.Zero
+                ? TimeSpan.FromDays(7)
+                : timeToLive.Value;
+
+            var result = await _database.StringSetAsync(
+                basket.Id,
+                value,
+                expiry);
+
             return result ? basket : null;
         }
 

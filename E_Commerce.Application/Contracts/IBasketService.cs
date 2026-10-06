@@ -13,7 +13,7 @@ namespace E_Commerce.Application.Contracts
         //get basket
         Task<Result<BasketDto>> GetBasketAsync(string BasketId, CancellationToken ct = default);
         //create or update basket
-        Task<Result<BasketDto>> CreateOrUpdateBasketAsync(BasketDto baskket, TimeSpan ttl = default , CancellationToken ct = default);
+        Task<Result<BasketDto>> CreateOrUpdateBasketAsync(BasketDto baskket, TimeSpan? ttl = null , CancellationToken ct = default);
 
         // delete basket
         Task<Result<bool>> DeleteBasketAsync(string basketId, CancellationToken ct = default);

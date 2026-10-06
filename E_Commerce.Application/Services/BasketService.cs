@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using E_Commerce.Application.Common;
 using E_Commerce.Application.Contracts;
 using E_Commerce.Application.DTOs.Baskets;
@@ -22,7 +22,7 @@ namespace E_Commerce.Application.Services
             _basketRepository = basketRepository;
             _mapper = mapper;
         }
-        public async Task<Result<BasketDto>> CreateOrUpdateBasketAsync(BasketDto basket, TimeSpan ttl = default, CancellationToken ct = default)
+        public async Task<Result<BasketDto>> CreateOrUpdateBasketAsync(BasketDto basket, TimeSpan? ttl = null, CancellationToken ct = default)
         {
             var customerBasket = _mapper.Map<CustomerBasket>(basket);
            var basketResult = await _basketRepository.CreateOrUpdateBasketAsync(customerBasket, ttl, ct);

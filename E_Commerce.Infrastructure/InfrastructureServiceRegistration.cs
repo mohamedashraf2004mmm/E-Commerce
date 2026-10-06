@@ -34,7 +34,7 @@ namespace E_Commerce.Infrastructure
             {
                 return ConnectionMultiplexer.Connect(config.GetConnectionString("RedisConnection"));
             });
-            services.AddScoped<IBasketRepository, IBasketRepository>();
+            services.AddScoped<IBasketRepository, BasketRepository>();
 
             return services;
         }
