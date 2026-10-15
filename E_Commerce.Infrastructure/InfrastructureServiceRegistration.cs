@@ -1,4 +1,6 @@
-﻿using E_Commerce.Domain.Contracts;
+﻿using E_Commerce.Application.Contracts;
+using E_Commerce.Application.Services;
+using E_Commerce.Domain.Contracts;
 using E_Commerce.Infrastructure.Data;
 using E_Commerce.Infrastructure.DataSeeding;
 using E_Commerce.Infrastructure.Repositories;
@@ -32,9 +34,12 @@ namespace E_Commerce.Infrastructure
 
             services.AddSingleton<IConnectionMultiplexer>(c =>
             {
-                return ConnectionMultiplexer.Connect(config.GetConnectionString("RedisConnection"));
+                return ConnectionMultiplexer.Connect(config.GetConnectionString("RedisConnection")!);
             });
             services.AddScoped<IBasketRepository, BasketRepository>();
+            services.AddSingleton<ICacheRepository, CacheRepository>();
+
+            services.AddSingleton<ICacheService, CacheService>();
 
             return services;
         }
