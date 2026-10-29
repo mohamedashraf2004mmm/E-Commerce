@@ -3,6 +3,7 @@ using E_Commerce.Application.Services;
 using E_Commerce.Domain.Contracts;
 using E_Commerce.Infrastructure.Data;
 using E_Commerce.Infrastructure.DataSeeding;
+using E_Commerce.Infrastructure.Identity.Data;
 using E_Commerce.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -23,6 +24,12 @@ namespace E_Commerce.Infrastructure
             services.AddDbContext<StoreDbContext>(options =>
             {
                 options.UseSqlServer(config.GetConnectionString("DefaultConnection"));
+                //so it will get the connection string from appsettings.json
+            });
+
+            services.AddDbContext<StoreIdentityDbContext>(options =>
+            {
+                options.UseSqlServer(config.GetConnectionString("IdentityConnection"));
                 //so it will get the connection string from appsettings.json
             });
 
