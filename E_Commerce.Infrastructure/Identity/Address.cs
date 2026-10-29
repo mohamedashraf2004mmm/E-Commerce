@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace E_Commerce.Infrastructure.Identity
 {
-    internal class Address
+    public class Address
     {
         public int Id { get; set; }
         public string City { get; set; } = default!;

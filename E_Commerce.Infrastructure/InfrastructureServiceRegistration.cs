@@ -3,8 +3,10 @@ using E_Commerce.Application.Services;
 using E_Commerce.Domain.Contracts;
 using E_Commerce.Infrastructure.Data;
 using E_Commerce.Infrastructure.DataSeeding;
+using E_Commerce.Infrastructure.Identity;
 using E_Commerce.Infrastructure.Identity.Data;
 using E_Commerce.Infrastructure.Repositories;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -36,6 +38,13 @@ namespace E_Commerce.Infrastructure
             //  services.AddScoped<IDataSeeder, CatalogDataSeeder>();
 
             services.AddKeyedScoped<IDataSeeder, CatalogDataSeeder>("catalog");
+            services.AddKeyedScoped<IDataSeeder, IdentityDataSeeder>("Identity");
+
+            services.AddIdentityCore<ApplicationUser>()
+                .AddRoles<IdentityRole>()
+                .AddEntityFrameworkStores<StoreIdentityDbContext>();
+               
+
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace E_Commerce.Infrastructure.Identity
 {
-    internal class ApplicationUser : IdentityUser
+    public class ApplicationUser : IdentityUser
     {
         public string DisplayName { get; set; } = default!;
         public Address? Address { get; set; }

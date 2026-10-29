@@ -4,6 +4,8 @@ using E_Commerce.Application.Profiles;
 using E_Commerce.Domain.Contracts;
 using E_Commerce.Extensions;
 using E_Commerce.Infrastructure;
+using E_Commerce.Infrastructure.Identity;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.FileProviders;
 
 namespace E_Commerce
@@ -30,6 +32,9 @@ namespace E_Commerce
             builder.Services.AddSwaggerGen();
 
 
+            //  builder.Services.AddIdentity<ApplicationUser, IdentityRole>();
+
+           
 
             var app = builder.Build();
             await app.SeedAndMigrateDataAsync();
