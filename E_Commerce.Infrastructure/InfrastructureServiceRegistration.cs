@@ -6,6 +6,7 @@ using E_Commerce.Infrastructure.DataSeeding;
 using E_Commerce.Infrastructure.Identity;
 using E_Commerce.Infrastructure.Identity.Data;
 using E_Commerce.Infrastructure.Repositories;
+using E_Commerce.Infrastructure.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -43,6 +44,8 @@ namespace E_Commerce.Infrastructure
             services.AddIdentityCore<ApplicationUser>()
                 .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<StoreIdentityDbContext>();
+
+            services.AddScoped<IIdentityService, IdentityService>();
                
 
 
