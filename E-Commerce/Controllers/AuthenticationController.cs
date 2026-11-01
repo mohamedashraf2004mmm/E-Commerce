@@ -19,9 +19,14 @@ namespace E_Commerce.Controllers
         }
         //Login
         [HttpPost("Login")]
-        public async Task<ActionResult<UserDto>>Login(LoginDto loginDto)
+        public async Task<ActionResult<UserDto>>Login(LoginDto loginDto , CancellationToken ct)
         {
-            return ToActionResult(await _authenticationService.LoginAsync(loginDto));
+            return ToActionResult(await _authenticationService.LoginAsync(loginDto , ct));
+        }
+        [HttpPost("Register")]
+        public async Task<ActionResult<UserDto>>Register(RegisterDto registerDto , CancellationToken ct)
+        {
+          return ToActionResult(await _authenticationService.RegisterAsync(registerDto , ct));
         }
     }
 }
