@@ -60,6 +60,8 @@ namespace E_Commerce.Infrastructure
 
             services.AddSingleton<ICacheService, CacheService>();
 
+            services.AddScoped<ITokenService, TokenService>();
+
             return services;
         }
 
