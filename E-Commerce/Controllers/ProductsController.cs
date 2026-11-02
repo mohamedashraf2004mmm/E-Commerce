@@ -2,6 +2,7 @@
 using E_Commerce.Application.Contracts;
 using E_Commerce.Application.DTOs.Products;
 using E_Commerce.Attributes;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
@@ -28,6 +29,7 @@ namespace E_Commerce.Controllers
 
         //get product by id
         [HttpGet("{id}")]
+        [Authorize]
         //for swagger
         [ProducesResponseType(typeof(ProblemDetails),StatusCodes.Status404NotFound)]
         public async Task<ActionResult<ProductDto>>GetProduct(int id , CancellationToken ct)
