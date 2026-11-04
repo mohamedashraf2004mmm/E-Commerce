@@ -4,6 +4,7 @@ using E_Commerce.Application.DTOs.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -23,6 +24,22 @@ namespace E_Commerce.Application.Services
         public Task<Result<bool>> CheckEmailExistAsync(string email, CancellationToken ct = default)
         {
             return _identityService.EmailExistAsync(email, ct);
+        }
+
+        public async Task<Result<UserDto>> GetCurrentUserAsync(string email, CancellationToken ct = default)
+        {
+            var userResult = await _identityService.FindUserByEmailAsync(email, ct);
+            var user = userResult.data;
+            var roles = await _identityService.GetUserRoles(email, ct);
+
+            var token = _tokenService.GenerateToken(user.Id, user.Email, user.UserName, roles.data);
+            return new UserDto()
+            {
+                DisplayName = user.DisplayName,
+                Email = email,
+                Token = token
+            };
+
         }
 
         public async Task<Result<UserDto>> LoginAsync(LoginDto loginDto, CancellationToken ct = default)

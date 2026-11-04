@@ -1,8 +1,11 @@
 ﻿using E_Commerce.Application.Contracts;
 using E_Commerce.Application.DTOs.Identity;
+using E_Commerce.Infrastructure.Identity;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 using IAuthenticationService = E_Commerce.Application.Contracts.IAuthenticationService;
 
 namespace E_Commerce.Controllers
@@ -36,6 +39,14 @@ namespace E_Commerce.Controllers
             return ToActionResult(await _authenticationService.CheckEmailExistAsync(email, ct));
         }
         //get current user
+        [HttpGet("Profile")]
+        [Authorize]
+        public async Task<ActionResult<UserDto>> GetCurrentUser(CancellationToken ct)
+        {
+            var email = User.FindFirstValue(ClaimTypes.Email) ?? throw new UnauthorizedAccessException("Token does not have email claim"); //has all info of authenticated user
+            return ToActionResult(await _authenticationService.GetCurrentUserAsync(email, ct));
+
+        }
 
         //get current user address
 
