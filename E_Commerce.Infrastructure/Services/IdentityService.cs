@@ -50,6 +50,11 @@ namespace E_Commerce.Infrastructure.Services
             return Result<IdentityUserResult>.Ok(new IdentityUserResult(user.Id , user.DisplayName , user.Email , user.UserName));
         }
 
+        public async Task<Result<bool>> EmailExistAsync(string email, CancellationToken ct = default)
+        {
+            return await _userManager.FindByEmailAsync(email) is not null ;
+        }
+
         public async Task<Result<IdentityUserResult>> FindUserByEmailAsync(string email, CancellationToken ct = default)
         {
             var user = await _userManager.FindByEmailAsync(email);

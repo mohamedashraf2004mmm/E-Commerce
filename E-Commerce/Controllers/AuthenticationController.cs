@@ -28,5 +28,18 @@ namespace E_Commerce.Controllers
         {
           return ToActionResult(await _authenticationService.RegisterAsync(registerDto , ct));
         }
+
+        //check email exist
+        [HttpGet("emailexists")]
+        public async Task<ActionResult<bool>>CheckEmail([FromQuery]string email , CancellationToken ct)
+        {
+            return ToActionResult(await _authenticationService.CheckEmailExistAsync(email, ct));
+        }
+        //get current user
+
+        //get current user address
+
+        //update current user address
+
     }
 }
