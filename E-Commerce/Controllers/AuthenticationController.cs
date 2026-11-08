@@ -59,6 +59,12 @@ namespace E_Commerce.Controllers
         }
 
         //update current user address
+        [Authorize]
+        [HttpPut("address")]
+        public async Task<ActionResult<AddressDto>>UpdateUserAddress(AddressDto addressDto,CancellationToken ct = default)
+        {
+            return ToActionResult(await _authenticationService.UpsertUserAddressAsync(GetEmailFromToken(), addressDto, ct));
+        }
 
     }
 }
