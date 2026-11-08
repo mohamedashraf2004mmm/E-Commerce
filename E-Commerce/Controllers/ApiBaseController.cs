@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 using System.Security.Cryptography;
 
 namespace E_Commerce.Controllers
@@ -53,6 +54,10 @@ namespace E_Commerce.Controllers
                 return new OkResult();
             else
                 return ToProblem(result.Errors);
+        }
+        protected string GetEmailFromToken()
+        {
+            return User.FindFirstValue(ClaimTypes.Email) ?? throw new UnauthorizedAccessException("Token does not have email claim"); //has all info of authenticated user
         }
     }
 }

@@ -3,6 +3,7 @@ using E_Commerce.Application.Contracts;
 using E_Commerce.Application.DTOs.Identity;
 using E_Commerce.Infrastructure.Identity;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -63,6 +64,20 @@ namespace E_Commerce.Infrastructure.Services
             else
                 return Result<IdentityUserResult>.Ok(new IdentityUserResult(
                     user.Id, user.DisplayName, user.Email!, user.UserName!));
+        }
+
+        public async Task<Result<AddressDto>> GetUserAddressByEmailAsync(string email, CancellationToken ct = default)
+        {
+            var user = await _userManager.Users.Include(x => x.Address).FirstOrDefaultAsync(x => x.Email == email , ct);
+            if (user?.Address == null) return Result<AddressDto>.Fail(Error.NotFound("address not found", $"address of user with email : {email} does not exist"));
+            return new AddressDto()
+            {
+                FirstName = user.Address.FirstName,
+                LastName = user.Address.LastName,
+                Country = user.Address.Country,
+                City = user.Address.City,
+                Street = user.Address.Street,
+            };
         }
 
         public async Task<Result<IReadOnlyList<string>>> GetUserRoles(string email, CancellationToken ct = default)

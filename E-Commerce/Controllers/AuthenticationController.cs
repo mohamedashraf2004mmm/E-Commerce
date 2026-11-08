@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using IAuthenticationService = E_Commerce.Application.Contracts.IAuthenticationService;
 
 namespace E_Commerce.Controllers
@@ -43,12 +44,19 @@ namespace E_Commerce.Controllers
         [Authorize]
         public async Task<ActionResult<UserDto>> GetCurrentUser(CancellationToken ct)
         {
-            var email = User.FindFirstValue(ClaimTypes.Email) ?? throw new UnauthorizedAccessException("Token does not have email claim"); //has all info of authenticated user
+            var email = GetEmailFromToken();
             return ToActionResult(await _authenticationService.GetCurrentUserAsync(email, ct));
 
         }
 
         //get current user address
+        [Authorize]
+        [HttpGet("address")]
+        public async Task<ActionResult<AddressDto>>GetCurrentUserAddress(CancellationToken ct = default)
+        {
+            var email = GetEmailFromToken();
+           return ToActionResult(await _authenticationService.GetUserAddressAsync(email, ct));
+        }
 
         //update current user address
 
