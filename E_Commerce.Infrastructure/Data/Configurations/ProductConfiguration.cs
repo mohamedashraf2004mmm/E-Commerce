@@ -12,7 +12,7 @@ namespace E_Commerce.Infrastructure.Data.Configurations
     internal class ProductConfiguration : IEntityTypeConfiguration<Product>
     {
         public void Configure(EntityTypeBuilder<Product> builder)
-        {
+        { 
             builder.HasOne(x => x.ProductBrand)
                    .WithMany()
                    .HasForeignKey(x => x.BrandId);
