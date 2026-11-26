@@ -11,7 +11,7 @@ namespace E_Commerce.Domain.Entities.Orders
     //Table
     public class Order : BaseEntity<Guid>
     {
-        private  Order()
+        private Order()
         {
             
         }
