@@ -25,6 +25,12 @@ namespace E_Commerce.Controllers
         }
 
         //get /api/orders/ delivery method => list of delivery methods
+        [AllowAnonymous]
+        [HttpGet("DeliveryMethods")]
+        public async Task<ActionResult<IReadOnlyList<DeliveryMethodDto>>> GetDeliveryMethods(CancellationToken ct)
+        {
+            return ToActionResult(await _orderService.GetDeliveryMethodsAsync(ct));
+        }
 
         //get /api/orders - orders of user => [email] => user orders for logged in user
         [Authorize]
