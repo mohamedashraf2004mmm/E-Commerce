@@ -1,4 +1,5 @@
-﻿using E_Commerce.Application.Common;
+﻿using AutoMapper;
+using E_Commerce.Application.Common;
 using E_Commerce.Application.Contracts;
 using E_Commerce.Application.DTOs.Orders;
 using E_Commerce.Application.Specifications;
@@ -17,11 +18,13 @@ namespace E_Commerce.Application.Services
     {
         private readonly IBasketRepository _basketRepository;
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
 
-        public OrderService(IBasketRepository basketRepository , IUnitOfWork unitOfWork)
+        public OrderService(IBasketRepository basketRepository , IUnitOfWork unitOfWork ,IMapper mapper)
         {
             _basketRepository = basketRepository;
             _unitOfWork = unitOfWork;
+            _mapper = mapper;
         }
         public async Task<Result<CreatedOrderDto>> CreateOrderAsync(OrderDto order, string email, CancellationToken ct = default)
         {
@@ -59,8 +62,12 @@ namespace E_Commerce.Application.Services
             }
 
             //shipping address
+            var orderAddress = _mapper.Map<OrderAddress>(order.ShippingAddress);
 
             //deliverymethod
+            var deliveryMethod = _unitOfWork.GetRepository<DeliveryMethod, int>().GetByIdAsync(order.DeliveryMethodId);
+            if (deliveryMethod == null)
+                return Error.NotFound("Delivery Method not found", $"delivery method with id {order.DeliveryMethodId} is not found");
 
             //subtotal
 

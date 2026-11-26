@@ -13,7 +13,7 @@ namespace E_Commerce.Application.DTOs.Orders
         [Required]
         public string BasketId { get; set; } = default!;
         [Required]
-        public int DeliveryMethod { get; set; }
+        public int DeliveryMethodId { get; set; }
         [Required]
         public AddressDto ShippingAddress { get; set; } = default!;
  
