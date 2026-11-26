@@ -26,12 +26,12 @@ namespace E_Commerce.Application.Services
             _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
-        public async Task<Result<CreatedOrderDto>> CreateOrderAsync(OrderDto order, string email, CancellationToken ct = default)
+        public async Task<Result<CreatedOrderDto>> CreateOrderAsync(OrderDto orderDto, string email, CancellationToken ct = default)
         {
             //items(order item)
-            var basket = await _basketRepository.GetBasketAsync(order.BasketId, ct);
+            var basket = await _basketRepository.GetBasketAsync(orderDto.BasketId, ct);
             if (basket == null)
-                return Error.NotFound("Basket not found", $"Basket with id {order.BasketId} is not found");
+                return Error.NotFound("Basket not found", $"Basket with id {orderDto.BasketId} is not found");
 
             if (basket.BasketItems.Count == 0)
                 return Error.Validation("Basket is empty", $"Can not create order with basket id {basket.Id}");
@@ -62,17 +62,29 @@ namespace E_Commerce.Application.Services
             }
 
             //shipping address
-            var orderAddress = _mapper.Map<OrderAddress>(order.ShippingAddress);
+            var orderAddress = _mapper.Map<OrderAddress>(orderDto.ShippingAddress);
 
             //deliverymethod
-            var deliveryMethod = _unitOfWork.GetRepository<DeliveryMethod, int>().GetByIdAsync(order.DeliveryMethodId);
+            var deliveryMethod = await _unitOfWork.GetRepository<DeliveryMethod, int>().GetByIdAsync(orderDto.DeliveryMethodId);
             if (deliveryMethod == null)
-                return Error.NotFound("Delivery Method not found", $"delivery method with id {order.DeliveryMethodId} is not found");
+                return Error.NotFound("Delivery Method not found", $"delivery method with id {orderDto.DeliveryMethodId} is not found");
 
             //subtotal
+            var subTotal = orderItems.Sum(o => o.Quantity * o.Price);
 
-            //total
-            //var order = new Order()
+            var order = new Order(email, orderAddress, orderItems, deliveryMethod, subTotal);
+            _unitOfWork.GetRepository<Order,Guid>().Add(order);
+            var result = await _unitOfWork.SaveChangesAsync(ct);
+
+            if (result == 0)
+            {
+                return Error.Failure("Order save failed", "Can not create order");
+            }
+            else
+            {
+                await _basketRepository.DeleteBasketAsync(orderDto.BasketId, ct);
+                return _mapper.Map<CreatedOrderDto>(order);
+            }
         }
     }
 }
